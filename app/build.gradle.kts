@@ -41,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
     implementation("com.google.maps.android:maps-compose:8.2.2")
     implementation("com.google.android.gms:play-services-maps:20.0.0")
     implementation(libs.androidx.core.ktx)
