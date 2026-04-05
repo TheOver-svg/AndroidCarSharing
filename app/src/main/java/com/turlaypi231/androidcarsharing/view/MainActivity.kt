@@ -1,4 +1,4 @@
-package com.turlaypi231.androidcarsharing
+package com.turlaypi231.androidcarsharing.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,8 +25,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidCarSharingTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
+                Scaffold(modifier = Modifier.Companion.fillMaxSize()) { innerPadding ->
+                    Box(modifier = Modifier.Companion.padding(innerPadding)) {
                         MyMapScreen()
                     }
                 }
@@ -48,7 +48,7 @@ fun MyMapScreen() {
     }
 
     GoogleMap(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.Companion.fillMaxSize(),
         cameraPositionState = cameraPositionState,
         uiSettings = mapUiSettings
     ) {
