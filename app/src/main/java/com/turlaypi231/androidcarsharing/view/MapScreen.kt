@@ -1,17 +1,16 @@
 package com.turlaypi231.androidcarsharing.view
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
-import com.turlaypi231.androidcarsharing.model.Car
 import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
 import com.turlaypi231.androidcarsharing.R
 import com.turlaypi231.androidcarsharing.utills.bitmapDescriptorFromVector
@@ -24,19 +23,23 @@ fun MapScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scaffoldState = rememberBottomSheetScaffoldState()
+    val peekHeight by animateDpAsState(
+        targetValue = if (uiState.selectedCar != null) 256.dp else 0.dp
+    )
     LaunchedEffect(uiState.selectedCar) {
         if (uiState.selectedCar != null) {
-            scaffoldState.bottomSheetState.expand()
-        } else {
             scaffoldState.bottomSheetState.partialExpand()
         }
     }
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
-        sheetPeekHeight = 0.dp,
+        sheetPeekHeight = peekHeight,
+        sheetDragHandle = { BottomSheetDefaults.DragHandle()},
         sheetContent = {
-            uiState.selectedCar?.let { car ->
-                CarDetailsSheet(car)
+            if (uiState.selectedCar != null) {
+                CarDetailsSheet(uiState.selectedCar!!)
+            } else {
+                Box(modifier = Modifier.height(1.dp))
             }
         }
     ) { paddingValues ->
