@@ -1,17 +1,26 @@
 package com.turlaypi231.androidcarsharing.view
 
+import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import android.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.turlaypi231.androidcarsharing.model.Car
 import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
+import com.turlaypi231.androidcarsharing.R
+import com.turlaypi231.androidcarsharing.utills.bitmapDescriptorFromVector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,12 +58,18 @@ fun MapScreen(
                 uiSettings = MapUiSettings(
                     zoomControlsEnabled = false,
                     mapToolbarEnabled = false
-                )
+                ),
+                onMapClick = {
+                    viewModel.onDismissBottomSheet()
+                }
             ) {
+                val context = LocalContext.current
+                val carIcon = bitmapDescriptorFromVector(context, R.drawable.ic_car)
                 uiState.cars.forEach { car ->
                     Marker(
                         state = MarkerState(position = car.location),
                         title = car.model,
+                        icon = carIcon,
                         onClick = {
                             viewModel.onClickCar(car)
                             true
