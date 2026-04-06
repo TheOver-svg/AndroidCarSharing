@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.turlaypi231.androidcarsharing.model.Car
 
@@ -24,6 +25,7 @@ fun CarDetailsSheet(car: Car) {
         Text(text = car.model, style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Заряд: ${car.fuelLevel}%", color = if (car.fuelLevel < 20) Color.Red else Color.Green)
+        Text(text = "Ціна за годину: ${car.price}$", color = Color.Green)
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { /* booking logic */ },
@@ -33,3 +35,10 @@ fun CarDetailsSheet(car: Car) {
         }
     }
 }
+
+//@Preview(showSystemUi = true)
+//@Composable
+//fun Preview()
+//{
+//    CarDetailsSheet()
+//}

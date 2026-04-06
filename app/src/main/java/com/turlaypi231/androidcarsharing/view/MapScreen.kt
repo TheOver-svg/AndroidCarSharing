@@ -5,6 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -12,6 +13,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import com.turlaypi231.androidcarsharing.model.Car
 import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
+import com.turlaypi231.androidcarsharing.R
+import com.turlaypi231.androidcarsharing.utills.bitmapDescriptorFromVector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +36,7 @@ fun MapScreen(
         sheetPeekHeight = 0.dp,
         sheetContent = {
             uiState.selectedCar?.let { car ->
-                CarDetailsContent(car)
+                CarDetailsSheet(car)
             }
         }
     ) { paddingValues ->
@@ -49,12 +52,18 @@ fun MapScreen(
                 uiSettings = MapUiSettings(
                     zoomControlsEnabled = false,
                     mapToolbarEnabled = false
-                )
+                ),
+                onMapClick = {
+                    viewModel.onDismissBottomSheet()
+                }
             ) {
+                val context = LocalContext.current
+                val carIcon = bitmapDescriptorFromVector(context, R.drawable.ic_car)
                 uiState.cars.forEach { car ->
                     Marker(
                         state = MarkerState(position = car.location),
                         title = car.model,
+                        icon = carIcon,
                         onClick = {
                             viewModel.onClickCar(car)
                             true
@@ -62,34 +71,6 @@ fun MapScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun CarDetailsContent(car: Car) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
-            .navigationBarsPadding()
-    ) {
-        Text(
-            text = car.model,
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Доступно пального: ${car.fuelLevel}%",
-            style = MaterialTheme.typography.bodyLarge,
-            color = if (car.fuelLevel < 20) Color.Red else Color.Unspecified
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { /* booking logic here */ },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Забронювати")
         }
     }
 }

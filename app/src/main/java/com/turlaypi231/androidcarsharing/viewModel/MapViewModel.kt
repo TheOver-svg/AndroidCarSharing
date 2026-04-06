@@ -19,9 +19,9 @@ class MapViewModel: ViewModel() {
     private fun loadMockCar()
     {
         val mockCars = listOf(
-            Car(id = "1", model = "Tesla Model 3", location = LatLng(49.423, 26.985), fuelLevel = 85, plateNumber = "ВХ0001НХ"),
-            Car(id = "2", model = "VW ID.4", location = LatLng(49.427, 26.978), fuelLevel = 40, plateNumber = "ВХ0002НХ"),
-            Car(id = "3", model = "Renault Zoe", location = LatLng(49.418, 26.992), fuelLevel = 15, plateNumber = "ВХ0003НХ")
+            Car(id = "1", model = "Tesla Model 3", price = 100, location = LatLng(49.423, 26.985), fuelLevel = 85, plateNumber = "ВХ0001НХ"),
+            Car(id = "2", model = "VW ID.4", price = 80, location = LatLng(49.427, 26.978), fuelLevel = 40, plateNumber = "ВХ0002НХ"),
+            Car(id = "3", model = "Renault Zoe", price = 50, location = LatLng(49.418, 26.992), fuelLevel = 15, plateNumber = "ВХ0003НХ")
         )
         _uiState.update { it.copy(cars = mockCars) }
     }
