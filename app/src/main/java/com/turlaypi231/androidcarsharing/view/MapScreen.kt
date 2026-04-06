@@ -1,19 +1,13 @@
 package com.turlaypi231.androidcarsharing.view
 
-import android.content.Context
-import android.graphics.Bitmap
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import android.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
@@ -42,7 +36,7 @@ fun MapScreen(
         sheetPeekHeight = 0.dp,
         sheetContent = {
             uiState.selectedCar?.let { car ->
-                CarDetailsContent(car)
+                CarDetailsSheet(car)
             }
         }
     ) { paddingValues ->
@@ -77,34 +71,6 @@ fun MapScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun CarDetailsContent(car: Car) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp)
-            .navigationBarsPadding()
-    ) {
-        Text(
-            text = car.model,
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Доступно пального: ${car.fuelLevel}%",
-            style = MaterialTheme.typography.bodyLarge,
-            color = if (car.fuelLevel < 20) Color.Red else Color.Unspecified
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { /* booking logic here */ },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Забронювати")
         }
     }
 }
