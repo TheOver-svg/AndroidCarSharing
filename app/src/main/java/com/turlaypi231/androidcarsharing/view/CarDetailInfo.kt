@@ -1,5 +1,7 @@
 package com.turlaypi231.androidcarsharing.view
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import com.turlaypi231.androidcarsharing.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.turlaypi231.androidcarsharing.model.Car
@@ -35,24 +39,45 @@ fun CarDetailsSheet(car: Car) {
             .padding(horizontal = 24.dp)
             .padding(bottom = 24.dp)
     ) {
-        Text(
-            text = car.model,
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = painterResource(id=getBatteryIcon(car.fuelLevel)),
-                contentDescription = "Battery Level",
-                modifier = Modifier.padding(end = 8.dp)
-            )
-            Text(
-                text = "${car.fuelLevel}%",
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (car.fuelLevel < 20) Color.Red else Color.Unspecified
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 20.dp)
+            ) {
+                Text(
+                    text = car.model,
+                    style = MaterialTheme.typography.headlineMedium
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(id = getBatteryIcon(car.fuelLevel)),
+                        contentDescription = "Battery Level",
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Text(
+                        text = "${car.fuelLevel}%",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (car.fuelLevel < 20) Color.Red else Color.Unspecified
+                    )
+                }
+            }
+            Image(
+                painter = painterResource(id = R.drawable.car_detail),
+                contentDescription = "3D car",
+                modifier = Modifier
+                    .height(150.dp)
+                    .padding(start = 16.dp)
+                    .offset(y = (-15).dp),
+                contentScale = ContentScale.Fit
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { /* booking logic */ },
             modifier = Modifier.fillMaxWidth()
