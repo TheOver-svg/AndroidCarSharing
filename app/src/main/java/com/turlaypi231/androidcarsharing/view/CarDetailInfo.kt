@@ -95,7 +95,7 @@ fun CarDetailsSheet(car: Car) {
         Spacer(modifier = Modifier.height(16.dp))
         Text("Номерний знак: ${car.plateNumber}")
         Spacer(modifier = Modifier.height(8.dp))
-        Text("Коробка передач: Автомат")
+        Text("Коробка передач: ${car.transmission}")
         Spacer(modifier = Modifier.height(8.dp))
         Text("Тариф: ${car.price} грн/година")
         Spacer(modifier = Modifier.height(8.dp))
