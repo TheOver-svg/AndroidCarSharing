@@ -25,7 +25,7 @@ fun MapScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scaffoldState = rememberBottomSheetScaffoldState()
     val peekHeight by animateDpAsState(
-        targetValue = if (uiState.selectedCar != null) 256.dp else 0.dp
+        targetValue = if (uiState.selectedCar != null) 280.dp else 0.dp
     )
     LaunchedEffect(uiState.selectedCar) {
         if (uiState.selectedCar != null) {
