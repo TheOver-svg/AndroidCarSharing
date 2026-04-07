@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.*
 import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
 import com.turlaypi231.androidcarsharing.R
@@ -48,13 +49,24 @@ fun MapScreen(
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(khmelnytskyi, 12f)
             }
+            val context = LocalContext.current
+            val mapProperties = remember {
+                MapProperties(
+                    mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style),
+                    isMyLocationEnabled = false,
+                    maxZoomPreference = 20f,
+                    minZoomPreference = 5f
+                )
+            }
 
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
+                properties = mapProperties,
                 uiSettings = MapUiSettings(
                     zoomControlsEnabled = false,
-                    mapToolbarEnabled = false
+                    mapToolbarEnabled = false,
+                    compassEnabled = false
                 ),
                 onMapClick = {
                     viewModel.onDismissBottomSheet()
