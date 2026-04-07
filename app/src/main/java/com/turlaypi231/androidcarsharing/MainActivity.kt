@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.turlaypi231.androidcarsharing.ui.theme.AndroidCarSharingTheme
-import com.turlaypi231.androidcarsharing.view.MapScreen
+import com.turlaypi231.androidcarsharing.view.MainScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidCarSharingTheme {
-                MapScreen()
+                MainScreen()
             }
         }
     }
