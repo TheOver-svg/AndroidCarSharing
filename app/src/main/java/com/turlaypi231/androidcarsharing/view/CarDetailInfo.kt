@@ -1,30 +1,22 @@
 package com.turlaypi231.androidcarsharing.view
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import com.turlaypi231.androidcarsharing.R
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.turlaypi231.androidcarsharing.R
 import com.turlaypi231.androidcarsharing.model.Car
 
 @Composable
@@ -35,74 +27,167 @@ fun CarDetailsSheet(car: Car) {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.85f)
-            .verticalScroll(scrollState)
             .padding(horizontal = 24.dp)
-            .padding(bottom = 24.dp)
+            .padding(bottom = 16.dp) // Трохи менший відступ знизу для кнопки
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
+        // Контент, який скролиться
+        Column(
+            modifier = Modifier
+                .weight(1f) // Займає весь вільний простір, відштовхуючи кнопку вниз
+                .verticalScroll(scrollState)
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 20.dp)
+            // 1. HEADER: Назва та 3D машинка
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically // Краще вирівнювання по центру
             ) {
                 Text(
                     text = car.model,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        painter = painterResource(id = getBatteryIcon(car.fuelLevel)),
-                        contentDescription = "Battery Level",
-                        modifier = Modifier.padding(end = 8.dp)
+                Image(
+                    painter = painterResource(id = R.drawable.car_detail),
+                    contentDescription = "3D car",
+                    modifier = Modifier
+                        .height(120.dp) // Трохи зменшив, щоб не перекривало текст
+                        .padding(start = 16.dp)
+                        .offset(y = (-10).dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 2. QUICK STATS: Характеристики у вигляді плиток
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                SpecCard(
+                    modifier = Modifier.weight(1f),
+                    title = "Заряд",
+                    value = "${car.fuelLevel}%",
+                    iconRes = getBatteryIcon(car.fuelLevel),
+                    valueColor = if (car.fuelLevel < 20) Color.Red else MaterialTheme.colorScheme.onSurface
+                )
+                SpecCard(
+                    modifier = Modifier.weight(1f),
+                    title = "КПП",
+                    value = car.transmission,
+                    iconRes = R.drawable.auto_transmission_24px
+                )
+                SpecCard(
+                    modifier = Modifier.weight(1f),
+                    title = "Номер",
+                    value = car.plateNumber,
+                    iconRes = R.drawable.plate_24px
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "Про автомобіль",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Чистий салон, кондиціонер працює. Будь ласка, залишайте автомобіль на дозволених парковках згідно з правилами сервісу.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
+            )
+
+            Spacer(modifier = Modifier.height(24.dp)) // Запас місця для скролу
+        }
+
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.surface,
+            shadowElevation = 8.dp, // Додає тінь, щоб відділити від тексту
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = "Тариф",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "${car.fuelLevel}%",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = if (car.fuelLevel < 20) Color.Red else Color.Unspecified
+                        text = "${car.price} ₴ / год",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                Button(
+                    onClick = { /* booking logic */ },
+                    modifier = Modifier
+                        .height(50.dp)
+                        .padding(start = 16.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = "Забронювати",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
-            Image(
-                painter = painterResource(id = R.drawable.car_detail),
-                contentDescription = "3D car",
-                modifier = Modifier
-                    .height(150.dp)
-                    .padding(start = 16.dp)
-                    .offset(y = (-15).dp),
-                contentScale = ContentScale.Fit
-            )
         }
-        Button(
-            onClick = { /* booking logic */ },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Забронювати")
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-        HorizontalDivider()
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = "Деталі автомобіля",
-            style = MaterialTheme.typography.titleLarge
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("Номерний знак: ${car.plateNumber}")
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Коробка передач: ${car.transmission}")
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Тариф: ${car.price} грн/година")
-        Spacer(modifier = Modifier.height(8.dp))
-        Text("Опис: Чистий салон, кондиціонер працює. Будь ласка, залишайте автомобіль на дозволених парковках згідно з правилами сервісу.")
     }
 }
-
+@Composable
+fun SpecCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    value: String,
+    iconRes: Int? = null,
+    valueColor: Color = MaterialTheme.colorScheme.onSurface
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (iconRes != null) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = title,
+                modifier = Modifier.size(24.dp).padding(bottom = 4.dp),
+                tint = valueColor
+            )
+        }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            color = valueColor
+        )
+    }
+}
 @Composable
 fun getBatteryIcon(fuelLevel: Int): Int
 {
