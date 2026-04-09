@@ -33,7 +33,13 @@ fun MainScreen(viewModel: MapViewModel = viewModel()) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val scaffoldState = rememberBottomSheetScaffoldState()
+    val bottomSheetState = rememberStandardBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        skipHiddenState = false
+    )
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = bottomSheetState
+    )
     val peekHeight by animateDpAsState(
         targetValue = if (uiState.selectedCar != null) 280.dp else 0.dp,
         label = "peekHeight"
@@ -41,13 +47,21 @@ fun MainScreen(viewModel: MapViewModel = viewModel()) {
 
     LaunchedEffect(uiState.selectedCar) {
         if (uiState.selectedCar != null) {
-            scaffoldState.bottomSheetState.partialExpand()
+            bottomSheetState.partialExpand()
+        } else {
+            bottomSheetState.hide()
+        }
+    }
+
+    LaunchedEffect(bottomSheetState.currentValue) {
+        if (bottomSheetState.currentValue == SheetValue.Hidden && uiState.selectedCar != null) {
+            viewModel.onDismissBottomSheet()
         }
     }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = false,
+        gesturesEnabled = drawerState.isOpen,
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.width(300.dp)) {
                 Spacer(Modifier.height(36.dp))
@@ -88,8 +102,7 @@ fun MainScreen(viewModel: MapViewModel = viewModel()) {
                 }
             }
         ) { paddingValues ->
-
-            Box(modifier = Modifier.padding(paddingValues).fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxSize()) {
 
                 MapContent(
                     modifier = Modifier.fillMaxSize(),
