@@ -47,6 +47,7 @@ fun MainScreen(viewModel: MapViewModel = viewModel()) {
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = false,
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.width(300.dp)) {
                 Spacer(Modifier.height(36.dp))
@@ -94,7 +95,10 @@ fun MainScreen(viewModel: MapViewModel = viewModel()) {
                     modifier = Modifier.fillMaxSize(),
                     cars = uiState.cars,
                     onCarClick = { car -> viewModel.onClickCar(car) },
-                    onMapClick = { viewModel.onDismissBottomSheet() }
+                    onMapClick = {
+                        viewModel.onDismissBottomSheet()
+                        scope.launch { drawerState.close() }
+                    }
                 )
 
                 FloatingActionButton(
