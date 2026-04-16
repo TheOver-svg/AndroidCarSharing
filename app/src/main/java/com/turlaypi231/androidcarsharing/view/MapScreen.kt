@@ -170,7 +170,7 @@ fun MapContent(
         val carIcon = bitmapDescriptorFromVector(context, R.drawable.ic_car)
         cars.forEach { car ->
             Marker(
-                state = MarkerState(position = car.location),
+                state = MarkerState(position = car.location.toLatLng()),
                 title = car.model,
                 icon = carIcon,
                 onClick = {

@@ -3,7 +3,6 @@ package com.turlaypi231.androidcarsharing.viewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.model.LatLng
 import com.turlaypi231.androidcarsharing.model.Car
 import com.turlaypi231.androidcarsharing.services.RetrofitClient
 import com.turlaypi231.androidcarsharing.view.MapUiState
@@ -37,6 +36,7 @@ class MapViewModel: ViewModel() {
         viewModelScope.launch {
             try {
                 val fetchedCars = RetrofitClient.api.getAllCars()
+
                 _uiState.update { currentState ->
                     currentState.copy(cars = fetchedCars)
                 }
