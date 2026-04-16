@@ -1,14 +1,17 @@
 package com.turlaypi231.androidcarsharing.model
 
-import com.google.android.gms.maps.model.LatLng
+import com.google.gson.annotations.SerializedName
 
-
-data class Car(
-    val id: String,
-    val model: String,
-    val transmission: String,
-    val price: Int,
-    val location: LatLng,
-    val fuelLevel: Int,
-    val plateNumber: String
-)
+data class LocationDto(val latitude: Double, val longitude: Double) {
+    fun toLatLng() = com.google.android.gms.maps.model.LatLng(latitude, longitude)
+}
+sealed class Car {
+    abstract val id: String
+    abstract val model: String
+    abstract val transmission: String
+    abstract val price: Int
+    abstract val location: LocationDto
+    abstract val description: String
+    @get:SerializedName("plate_number") abstract val plateNumber: String
+    @get:SerializedName("engine_type") abstract val engineType: String
+}

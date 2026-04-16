@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.turlaypi231.androidcarsharing.R
 import com.turlaypi231.androidcarsharing.model.Car
+import com.turlaypi231.androidcarsharing.model.ElectricCar
+import com.turlaypi231.androidcarsharing.model.GasolineCar
 
 @Composable
 fun CarDetailsSheet(car: Car) {
@@ -28,19 +30,18 @@ fun CarDetailsSheet(car: Car) {
             .fillMaxWidth()
             .fillMaxHeight(0.85f)
             .padding(horizontal = 24.dp)
-            .padding(bottom = 16.dp) // Трохи менший відступ знизу для кнопки
+            .padding(bottom = 16.dp)
     ) {
-        // Контент, який скролиться
+
         Column(
             modifier = Modifier
-                .weight(1f) // Займає весь вільний простір, відштовхуючи кнопку вниз
+                .weight(1f)
                 .verticalScroll(scrollState)
         ) {
-            // 1. HEADER: Назва та 3D машинка
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically // Краще вирівнювання по центру
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = car.model,
@@ -53,7 +54,7 @@ fun CarDetailsSheet(car: Car) {
                     painter = painterResource(id = R.drawable.car_detail),
                     contentDescription = "3D car",
                     modifier = Modifier
-                        .height(120.dp) // Трохи зменшив, щоб не перекривало текст
+                        .height(120.dp)
                         .padding(start = 16.dp)
                         .offset(y = (-10).dp),
                     contentScale = ContentScale.Fit
@@ -62,18 +63,31 @@ fun CarDetailsSheet(car: Car) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 2. QUICK STATS: Характеристики у вигляді плиток
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                SpecCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Заряд",
-                    value = "${car.fuelLevel}%",
-                    iconRes = getBatteryIcon(car.fuelLevel),
-                    valueColor = if (car.fuelLevel < 20) Color.Red else MaterialTheme.colorScheme.onSurface
-                )
+                when (car) {
+                    is ElectricCar -> {
+                        SpecCard(
+                            modifier = Modifier.weight(1f),
+                            title = "Заряд",
+                            value = "${car.batteryLevel}%",
+                            iconRes = getBatteryIcon(car.batteryLevel),
+                            valueColor = if (car.batteryLevel < 20) Color.Red else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    is GasolineCar -> {
+                        SpecCard(
+                            modifier = Modifier.weight(1f),
+                            title = "Паливо",
+                            value = "${car.fuelLevel}%",
+                            iconRes = R.drawable.local_gas_station_24px,
+                            valueColor = if (car.fuelLevel < 20) Color.Red else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+
                 SpecCard(
                     modifier = Modifier.weight(1f),
                     title = "КПП",
@@ -98,19 +112,19 @@ fun CarDetailsSheet(car: Car) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Чистий салон, кондиціонер працює. Будь ласка, залишайте автомобіль на дозволених парковках згідно з правилами сервісу.",
+                text = car.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
             )
 
-            Spacer(modifier = Modifier.height(24.dp)) // Запас місця для скролу
+            Spacer(modifier = Modifier.height(24.dp))
         }
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.surface,
-            shadowElevation = 8.dp, // Додає тінь, щоб відділити від тексту
+            shadowElevation = 8.dp,
             shape = RoundedCornerShape(16.dp)
         ) {
             Row(
@@ -151,6 +165,7 @@ fun CarDetailsSheet(car: Car) {
         }
     }
 }
+
 @Composable
 fun SpecCard(
     modifier: Modifier = Modifier,
@@ -189,15 +204,14 @@ fun SpecCard(
     }
 }
 @Composable
-fun getBatteryIcon(fuelLevel: Int): Int
-{
+fun getBatteryIcon(level: Int): Int {
     return when {
-        fuelLevel > 90 -> R.drawable.battery_android_frame_full_24px
-        fuelLevel > 70 -> R.drawable.battery_android_frame_5_24px
-        fuelLevel > 50 -> R.drawable.battery_android_frame_4_24px
-        fuelLevel > 35 -> R.drawable.battery_android_frame_3_24px
-        fuelLevel > 20 -> R.drawable.battery_android_frame_2_24px
-        fuelLevel > 10 -> R.drawable.battery_android_frame_1_24px
+        level > 90 -> R.drawable.battery_android_frame_full_24px
+        level > 70 -> R.drawable.battery_android_frame_5_24px
+        level > 50 -> R.drawable.battery_android_frame_4_24px
+        level > 35 -> R.drawable.battery_android_frame_3_24px
+        level > 20 -> R.drawable.battery_android_frame_2_24px
+        level > 10 -> R.drawable.battery_android_frame_1_24px
         else -> R.drawable.battery_android_alert_24px
     }
 }
