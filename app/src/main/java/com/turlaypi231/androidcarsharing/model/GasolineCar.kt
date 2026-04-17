@@ -12,5 +12,5 @@ data class GasolineCar(
     @get:SerializedName("plate_number") override val plateNumber: String,
     @get:SerializedName("engine_type") override val engineType: String,
 
-    @SerializedName("fuel_level") val fuelLevel: Int
+    @SerializedName("fuelLevel") val fuelLevel: Int
 ) : Car()
