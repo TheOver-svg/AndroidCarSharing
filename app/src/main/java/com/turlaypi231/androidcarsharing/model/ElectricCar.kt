@@ -12,5 +12,5 @@ data class ElectricCar(
     @get:SerializedName("plate_number") override val plateNumber: String,
     @get:SerializedName("engine_type") override val engineType: String,
 
-    @SerializedName("battery_level") val batteryLevel: Int
+    @SerializedName("batteryLevel") val batteryLevel: Int
 ) : Car()
