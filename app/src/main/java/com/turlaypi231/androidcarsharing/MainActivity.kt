@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.turlaypi231.androidcarsharing.ui.theme.AndroidCarSharingTheme
+import com.turlaypi231.androidcarsharing.view.IntroScreen
 import com.turlaypi231.androidcarsharing.view.MainScreen
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +14,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidCarSharingTheme {
-                MainScreen()
+                IntroScreen(
+                    onLoginClick = { _, _ -> },
+                    onRegisterClick = {}
+                )
             }
         }
     }
