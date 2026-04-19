@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.turlaypi231.androidcarsharing.R
 import com.turlaypi231.androidcarsharing.model.Car
@@ -117,6 +118,16 @@ fun CarDetailsSheet(car: Car) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = MaterialTheme.typography.bodyLarge.lineHeight
             )
+//            Spacer(modifier= Modifier.height(20.dp))
+//            Text(
+//                modifier = Modifier.fillMaxWidth(),
+//                textAlign = TextAlign.Center,
+//                text = "Тарифи",
+//                style = MaterialTheme.typography.titleMedium,
+//                fontWeight = FontWeight.SemiBold,
+//            )
+//            Spacer(modifier = Modifier.height(8.dp))
+//
 
             Spacer(modifier = Modifier.height(24.dp))
         }
