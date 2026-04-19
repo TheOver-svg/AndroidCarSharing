@@ -35,7 +35,8 @@ class MapViewModel: ViewModel() {
     fun loadCars() {
         viewModelScope.launch {
             try {
-                val fetchedCars = RetrofitClient.api.getAllCars()
+
+                val fetchedCars = RetrofitClient.carApi.getAllCars()
 
                 _uiState.update { currentState ->
                     currentState.copy(cars = fetchedCars)
