@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.turlaypi231.androidcarsharing.model.User
 import com.turlaypi231.androidcarsharing.services.RetrofitClient
+import com.turlaypi231.androidcarsharing.services.TokenManager
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -32,9 +33,13 @@ class AuthViewModel : ViewModel() {
                 val response = RetrofitClient.authApi.login(credentials)
 
                 if (response.isSuccessful) {
+                    val token = response.body()?.token
+
+                    TokenManager.token = token
+
                     onSuccess()
                 } else {
-                    android.util.Log.e("API_ERROR", "Помилка входу")
+                    android.util.Log.e("API_ERROR", "Помилка входу: ${response.code()}")
                 }
             } catch (e: Exception) {
                 android.util.Log.e("API_ERROR", "Мережа: ${e.message}")
