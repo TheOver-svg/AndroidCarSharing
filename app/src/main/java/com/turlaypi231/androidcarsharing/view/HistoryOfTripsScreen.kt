@@ -1,4 +1,9 @@
 package com.turlaypi231.androidcarsharing.view
 
-class HistoryOfTripsScreen {
+import androidx.compose.runtime.Composable
+
+@Composable
+fun HistoryOfTripsScreen()
+{
+
 }

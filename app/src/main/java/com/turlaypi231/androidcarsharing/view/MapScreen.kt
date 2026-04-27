@@ -25,10 +25,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: MapViewModel = viewModel()) {
+fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostController) {
     val uiState by viewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -77,7 +79,10 @@ fun MainScreen(viewModel: MapViewModel = viewModel()) {
                     label = { Text("Профіль") },
                     selected = false,
                     onClick = {
-                        scope.launch { drawerState.close() }
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigate("profile")
+                        }
                     }
                 )
                 NavigationDrawerItem(
@@ -180,12 +185,4 @@ fun MapContent(
             )
         }
     }
-}
-
-
-
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewInterface() {
-    MainScreen()
 }

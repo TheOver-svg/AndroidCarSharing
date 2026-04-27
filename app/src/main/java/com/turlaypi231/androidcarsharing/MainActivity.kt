@@ -11,7 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.turlaypi231.androidcarsharing.services.TokenManager
+import com.turlaypi231.androidcarsharing.view.HistoryOfTripsScreen
 import com.turlaypi231.androidcarsharing.view.MainScreen
+import com.turlaypi231.androidcarsharing.view.ProfileScreen
 import com.turlaypi231.androidcarsharing.view.RegisterScreen
 import com.turlaypi231.androidcarsharing.viewModel.AuthViewModel
 
@@ -40,9 +43,8 @@ fun AppNavigation() {
             IntroScreen(
                 onLoginClick = { email, password ->
                     authViewModel.login(email, password) {
-                        // Перекидаємо на головний екран після успішного входу
                         navController.navigate("mainScreen") {
-                            popUpTo("login") { inclusive = true } // Видаляємо логін з історії
+                            popUpTo("login") { inclusive = true }
                         }
                     }
                 },
@@ -56,7 +58,6 @@ fun AppNavigation() {
             RegisterScreen(
                 onRegisterSuccess = { name, email, phone, pass ->
                     authViewModel.register(name, email, phone, pass) {
-                        // Перекидаємо на логін після успішної реєстрації
                         navController.navigate("login") {
                             popUpTo("register") { inclusive = true }
                         }
@@ -68,9 +69,27 @@ fun AppNavigation() {
             )
         }
 
-        // Твій майбутній головний екран (додай, якщо його ще немає в NavHost)
+        composable("trips_history") {
+            // Тут має бути виклик твого екрана історії
+            HistoryOfTripsScreen()
+        }
+
+        composable("profile") {
+            ProfileScreen(
+                onHistoryClick = {
+                    navController.navigate("trips_history")
+                },
+                onLogoutClick = {
+                    TokenManager.token = null
+                    navController.navigate("login") {
+                        popUpTo("profile") { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable("mainScreen") {
-            MainScreen()
+            MainScreen(navController = navController)
         }
     }
 }

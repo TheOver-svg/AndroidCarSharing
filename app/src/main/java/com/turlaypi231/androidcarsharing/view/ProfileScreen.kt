@@ -5,28 +5,38 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.turlaypi231.androidcarsharing.ui.theme.DarkBackground
 import com.turlaypi231.androidcarsharing.ui.theme.DarkSurface
 import com.turlaypi231.androidcarsharing.ui.theme.OrangePrimary
+import com.turlaypi231.androidcarsharing.viewModel.UserViewModel
 
 @Composable
 fun ProfileScreen(
-    onHistoryClick: () -> Unit = {},
-    onLogoutClick: () -> Unit = {}
+    userViewModel: UserViewModel = viewModel(),
+    onHistoryClick: () -> Unit,
+    onLogoutClick: () -> Unit
 ) {
+    // Підписуємось на дані з ViewModel
+    val userProfile by userViewModel.profile.collectAsState()
+
+    // Завантажуємо профіль при вході
+    LaunchedEffect(Unit) {
+        userViewModel.fetchProfile()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,6 +46,7 @@ fun ProfileScreen(
     ) {
         Spacer(modifier = Modifier.height(40.dp))
 
+        // Аватарка (заглушка з іконкою)
         Box(
             modifier = Modifier
                 .size(100.dp)
@@ -53,8 +64,9 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Ім'я користувача
         Text(
-            text = "Ярослав Турлай",
+            text = userProfile?.full_name ?: "Завантаження...",
             color = Color.White,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
@@ -62,60 +74,49 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        // Картка з деталями
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = DarkSurface),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                ProfileInfoRow(Icons.Default.Email, "Email", "test@example.com")
-                HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color.DarkGray)
-                ProfileInfoRow(Icons.Default.Phone, "Телефон", "+380 98 000 00 00")
+                ProfileInfoRow(Icons.Default.Email, "Email", userProfile?.email ?: "-")
+                Divider(modifier = Modifier.padding(vertical = 12.dp), color = Color.DarkGray)
+                ProfileInfoRow(Icons.Default.Phone, "Телефон", userProfile?.phone ?: "-")
             }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Кнопка історії поїздок
         Button(
             onClick = onHistoryClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
+            modifier = Modifier.fillMaxWidth().height(56.dp),
             colors = ButtonDefaults.buttonColors(containerColor = DarkSurface),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
         ) {
             Icon(Icons.Default.History, contentDescription = null, tint = OrangePrimary)
             Spacer(modifier = Modifier.width(12.dp))
-            Text(text = "Змінити інформацію", color = Color.White)
+            Text(text = "Історія поїздок", color = Color.White)
             Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp),
-                tint = Color.Gray
-            )
+            Icon(Icons.Default.ArrowForwardIos, contentDescription = null, modifier = Modifier.size(16.dp), tint = Color.Gray)
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
+        // Кнопка виходу
         TextButton(onClick = onLogoutClick) {
-            Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = null, tint = Color.Red)
+            Icon(Icons.Default.ExitToApp, contentDescription = null, tint = Color.Red)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "Вийти з акаунту",
-                color = Color.Red,
-                fontWeight = FontWeight.Bold
-            )
+            Text(text = "Вийти з акаунту", color = Color.Red, fontWeight = FontWeight.Bold)
         }
     }
 }
 
 @Composable
-private fun ProfileInfoRow(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    label: String,
-    value: String
-) {
+fun ProfileInfoRow(icon: ImageVector, label: String, value: String) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -137,5 +138,5 @@ private fun ProfileInfoRow(
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewProfile() {
-    ProfileScreen()
+    ProfileScreen(onHistoryClick = {}, onLogoutClick = {})
 }
