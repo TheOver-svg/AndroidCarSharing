@@ -6,7 +6,7 @@ data class UserProfile(
     val phone: String
 )
 
-data class TripResponce(
+data class TripResponse(
     val trip_id: Int,
     val car_model: String,
     val start_time: String,
