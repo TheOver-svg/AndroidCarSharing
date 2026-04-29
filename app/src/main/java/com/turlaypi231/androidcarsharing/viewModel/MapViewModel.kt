@@ -48,7 +48,7 @@ class MapViewModel: ViewModel() {
         }
     }
 
-    fun reserveCar(carId: Int, onSuccess: () -> Unit) {
+    fun reserveCar(carId: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.carApi.bookCar(carId)
