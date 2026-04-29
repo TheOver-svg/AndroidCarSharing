@@ -162,7 +162,7 @@ fun CarDetailsSheet(car: Car, mapViewModel: MapViewModel = viewModel(), onBookin
 
                 Button(
                     onClick = {
-                        mapViewModel.reserveCar(car.id) {
+                        mapViewModel.reserveCar(car.id.toInt()) {
                             onBookingSuccess()
                         } },
                     modifier = Modifier
