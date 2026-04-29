@@ -15,15 +15,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.turlaypi231.androidcarsharing.R
 import com.turlaypi231.androidcarsharing.model.Car
 import com.turlaypi231.androidcarsharing.model.ElectricCar
 import com.turlaypi231.androidcarsharing.model.GasolineCar
+import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
 
 @Composable
-fun CarDetailsSheet(car: Car) {
+fun CarDetailsSheet(car: Car, mapViewModel: MapViewModel = viewModel(), onBookingSuccess: () -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -160,7 +161,10 @@ fun CarDetailsSheet(car: Car) {
                 }
 
                 Button(
-                    onClick = { /* booking logic */ },
+                    onClick = {
+                        mapViewModel.reserveCar(car.id.toInt()) {
+                            onBookingSuccess()
+                        } },
                     modifier = Modifier
                         .height(50.dp)
                         .padding(start = 16.dp),
