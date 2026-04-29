@@ -102,7 +102,7 @@ fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostCont
             sheetContent = {
                 if (uiState.selectedCar != null) {
                     CarDetailsSheet(uiState.selectedCar!!,
-                        onBookingSuccess = {})
+                        onBookingSuccess = {viewModel.loadCars()})
                 } else {
                     Box(modifier = Modifier.height(1.dp))
                 }
