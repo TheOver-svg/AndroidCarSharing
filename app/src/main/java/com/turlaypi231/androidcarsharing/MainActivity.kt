@@ -70,7 +70,6 @@ fun AppNavigation() {
         }
 
         composable("trips_history") {
-            // Тут має бути виклик твого екрана історії
             HistoryOfTripsScreen()
         }
 
@@ -84,7 +83,8 @@ fun AppNavigation() {
                     navController.navigate("login") {
                         popUpTo("profile") { inclusive = true }
                     }
-                }
+                },
+                onBackClick = { navController.popBackStack() }
             )
         }
 
