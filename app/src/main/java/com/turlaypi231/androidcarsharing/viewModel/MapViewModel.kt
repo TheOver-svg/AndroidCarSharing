@@ -47,6 +47,19 @@ class MapViewModel: ViewModel() {
             }
         }
     }
+
+    fun reserveCar(carId: Int, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.carApi.bookCar(carId)
+                if (response.isSuccessful) {
+                    onSuccess()
+                }
+            } catch (e: Exception) {
+                Log.e("BOOKING", "Помилка бронювання: ${e.message}")
+            }
+        }
+    }
     fun onClickCar(car: Car)
     {
         _uiState.update { it.copy(selectedCar = car) }
