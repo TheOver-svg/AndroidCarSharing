@@ -1,5 +1,6 @@
 package com.turlaypi231.androidcarsharing.view
 
+import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -27,15 +28,15 @@ import com.turlaypi231.androidcarsharing.viewModel.UserViewModel
 fun ProfileScreen(
     userViewModel: UserViewModel = viewModel(),
     onHistoryClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
-    // Підписуємось на дані з ViewModel
     val userProfile by userViewModel.profile.collectAsState()
 
-    // Завантажуємо профіль при вході
     LaunchedEffect(Unit) {
         userViewModel.fetchProfile()
     }
+
 
     Column(
         modifier = Modifier
@@ -44,9 +45,19 @@ fun ProfileScreen(
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // Аватарка (заглушка з іконкою)
+        Box(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.TopStart)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
         Box(
             modifier = Modifier
                 .size(100.dp)
@@ -64,7 +75,6 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Ім'я користувача
         Text(
             text = userProfile?.full_name ?: "Завантаження...",
             color = Color.White,
@@ -74,7 +84,6 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Картка з деталями
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = DarkSurface),
@@ -89,7 +98,6 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Кнопка історії поїздок
         Button(
             onClick = onHistoryClick,
             modifier = Modifier.fillMaxWidth().height(56.dp),
@@ -106,7 +114,6 @@ fun ProfileScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Кнопка виходу
         TextButton(onClick = onLogoutClick) {
             Icon(Icons.Default.ExitToApp, contentDescription = null, tint = Color.Red)
             Spacer(modifier = Modifier.width(8.dp))
@@ -138,5 +145,5 @@ fun ProfileInfoRow(icon: ImageVector, label: String, value: String) {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewProfile() {
-    ProfileScreen(onHistoryClick = {}, onLogoutClick = {})
+    ProfileScreen(onHistoryClick = {}, onLogoutClick = {}, onBackClick = {})
 }
