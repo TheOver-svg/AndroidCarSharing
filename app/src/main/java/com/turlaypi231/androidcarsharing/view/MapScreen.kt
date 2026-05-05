@@ -90,6 +90,7 @@ fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostCont
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
+                        navController.navigate("trips_history")
                     }
                 )
             }
