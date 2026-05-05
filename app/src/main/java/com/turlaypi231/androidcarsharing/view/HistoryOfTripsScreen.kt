@@ -37,7 +37,6 @@ fun HistoryOfTripsScreen(
 
     val trips by tripsViewModel.trips.collectAsState()
 
-    // Запускаємо завантаження з API при відкритті екрана
     LaunchedEffect(Unit) {
         tripsViewModel.fetchTrips()
     }
@@ -47,16 +46,15 @@ fun HistoryOfTripsScreen(
             .background(DarkBackground)
             .padding(horizontal = 24.dp)
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(36.dp))
 
-        // Верхня панель (Кнопка назад + Заголовок)
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
                 onClick = onBackClick,
-                modifier = Modifier.offset(x = (-12).dp) // Трохи зміщуємо вліво для гарного відступу
+                modifier = Modifier.offset(x = (-12).dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
@@ -89,7 +87,7 @@ fun HistoryOfTripsScreen(
 }
 
 @Composable
-fun TripHistoryItem(trip: TripResponse) { // Використовуємо твою модель з пакета data
+fun TripHistoryItem(trip: TripResponse) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = DarkSurface),
@@ -102,7 +100,6 @@ fun TripHistoryItem(trip: TripResponse) { // Використовуємо тво
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Іконка машини у кружечку
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -120,23 +117,21 @@ fun TripHistoryItem(trip: TripResponse) { // Використовуємо тво
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Інформація про поїздку
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = trip.car_model, // Змінено на car_model
+                    text = trip.car_model,
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = trip.start_time ?: "Невідомо", // Змінено на start_time
+                    text = trip.start_time ?: "Невідомо",
                     color = Color.Gray,
                     fontSize = 12.sp
                 )
             }
 
-            // Статус та ціна
             Column(horizontalAlignment = Alignment.End) {
                 val statusColor = when (trip.status) {
                     "active" -> OrangePrimary
