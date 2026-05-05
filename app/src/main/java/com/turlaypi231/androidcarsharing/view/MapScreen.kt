@@ -90,7 +90,6 @@ fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostCont
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
-                        navController.navigate("trips_history")
                     }
                 )
             }
@@ -102,7 +101,8 @@ fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostCont
             sheetDragHandle = { BottomSheetDefaults.DragHandle() },
             sheetContent = {
                 if (uiState.selectedCar != null) {
-                    CarDetailsSheet(uiState.selectedCar!!, onBookClick = { navController.navigate("payment_screen") })
+                    CarDetailsSheet(uiState.selectedCar!!,
+                        onBookingSuccess = {viewModel.loadCars()})
                 } else {
                     Box(modifier = Modifier.height(1.dp))
                 }
