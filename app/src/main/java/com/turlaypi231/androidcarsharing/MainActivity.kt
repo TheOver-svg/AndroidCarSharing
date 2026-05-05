@@ -70,7 +70,9 @@ fun AppNavigation() {
         }
 
         composable("trips_history") {
-            HistoryOfTripsScreen()
+            HistoryOfTripsScreen(onBackClick = {
+                navController.popBackStack()
+            })
         }
 
         composable("profile") {
