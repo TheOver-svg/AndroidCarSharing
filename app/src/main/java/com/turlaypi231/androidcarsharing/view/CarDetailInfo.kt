@@ -24,7 +24,7 @@ import com.turlaypi231.androidcarsharing.model.GasolineCar
 import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
 
 @Composable
-fun CarDetailsSheet(car: Car, mapViewModel: MapViewModel = viewModel(), onBookingSuccess: () -> Unit) {
+fun CarDetailsSheet(car: Car, mapViewModel: MapViewModel = viewModel(), onNavigateToPayment: (Int) -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -161,13 +161,8 @@ fun CarDetailsSheet(car: Car, mapViewModel: MapViewModel = viewModel(), onBookin
                 }
 
                 Button(
-                    onClick = {
-                        mapViewModel.reserveCar(car.id.toInt()) {
-                            onBookingSuccess()
-                        } },
-                    modifier = Modifier
-                        .height(50.dp)
-                        .padding(start = 16.dp),
+                    onClick = { onNavigateToPayment(car.id.toInt()) },
+                    modifier = Modifier.height(50.dp).padding(start = 16.dp),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(

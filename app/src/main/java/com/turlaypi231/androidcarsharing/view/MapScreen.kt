@@ -101,12 +101,15 @@ fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostCont
             sheetPeekHeight = peekHeight,
             sheetDragHandle = { BottomSheetDefaults.DragHandle() },
             sheetContent = {
-                if (uiState.selectedCar != null) {
-                    CarDetailsSheet(uiState.selectedCar!!,
-                        onBookingSuccess = {viewModel.loadCars()})
-                } else {
-                    Box(modifier = Modifier.height(1.dp))
-                }
+                uiState.selectedCar?.let { car ->
+                    CarDetailsSheet(
+                        car = car,
+                        onNavigateToPayment = { carId ->
+                            scope.launch { scaffoldState.bottomSheetState.hide() }
+                            navController.navigate("payment_screen/$carId")
+                        }
+                    )
+                } ?: Box(modifier = Modifier.height(1.dp))
             }
         ) { paddingValues ->
             Box(modifier = Modifier.fillMaxSize()) {

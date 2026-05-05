@@ -18,6 +18,7 @@ import com.turlaypi231.androidcarsharing.view.PaymentScreen
 import com.turlaypi231.androidcarsharing.view.ProfileScreen
 import com.turlaypi231.androidcarsharing.view.RegisterScreen
 import com.turlaypi231.androidcarsharing.viewModel.AuthViewModel
+import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,10 +77,20 @@ fun AppNavigation() {
             })
         }
 
-        composable("payment_screen") {
+        composable("payment_screen/{carId}") { backStackEntry ->
+            val carIdString = backStackEntry.arguments?.getString("carId")
+            val carId = carIdString?.toIntOrNull()
+            val mapViewModel: MapViewModel = viewModel()
+
             PaymentScreen(
                 onPaySuccess = {
-                    navController.popBackStack()
+                    if (carId != null) {
+                        mapViewModel.reserveCar(carId) {
+                            navController.navigate("mainScreen") {
+                                popUpTo("mainScreen") { inclusive = true }
+                            }
+                        }
+                    }
                 },
                 onBackClick = {
                     navController.popBackStack()
