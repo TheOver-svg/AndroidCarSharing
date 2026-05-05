@@ -102,7 +102,7 @@ fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostCont
             sheetDragHandle = { BottomSheetDefaults.DragHandle() },
             sheetContent = {
                 if (uiState.selectedCar != null) {
-                    CarDetailsSheet(uiState.selectedCar!!)
+                    CarDetailsSheet(uiState.selectedCar!!, onBookClick = { navController.navigate("payment_screen") })
                 } else {
                     Box(modifier = Modifier.height(1.dp))
                 }

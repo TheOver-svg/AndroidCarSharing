@@ -23,7 +23,7 @@ import com.turlaypi231.androidcarsharing.model.ElectricCar
 import com.turlaypi231.androidcarsharing.model.GasolineCar
 
 @Composable
-fun CarDetailsSheet(car: Car) {
+fun CarDetailsSheet(car: Car, onBookClick: () -> Unit) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -160,7 +160,7 @@ fun CarDetailsSheet(car: Car) {
                 }
 
                 Button(
-                    onClick = { /* booking logic */ },
+                    onClick = onBookClick,
                     modifier = Modifier
                         .height(50.dp)
                         .padding(start = 16.dp),
