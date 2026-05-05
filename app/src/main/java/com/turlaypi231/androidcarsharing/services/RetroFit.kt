@@ -12,7 +12,7 @@ object TokenManager {
     var token: String? = null
 }
 object RetrofitClient {
-    private const val BASE_URL = "http://192.168.0.101:8000/"
+    private const val BASE_URL = "http://192.168.0.100:8000/"
 
     private val client = OkHttpClient.Builder()
         .addInterceptor { chain ->

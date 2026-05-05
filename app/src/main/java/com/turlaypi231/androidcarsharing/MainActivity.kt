@@ -14,9 +14,11 @@ import androidx.navigation.compose.rememberNavController
 import com.turlaypi231.androidcarsharing.services.TokenManager
 import com.turlaypi231.androidcarsharing.view.HistoryOfTripsScreen
 import com.turlaypi231.androidcarsharing.view.MainScreen
+import com.turlaypi231.androidcarsharing.view.PaymentScreen
 import com.turlaypi231.androidcarsharing.view.ProfileScreen
 import com.turlaypi231.androidcarsharing.view.RegisterScreen
 import com.turlaypi231.androidcarsharing.viewModel.AuthViewModel
+import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +72,30 @@ fun AppNavigation() {
         }
 
         composable("trips_history") {
-            HistoryOfTripsScreen()
+            HistoryOfTripsScreen(onBackClick = {
+                navController.popBackStack()
+            })
+        }
+
+        composable("payment_screen/{carId}") { backStackEntry ->
+            val carIdString = backStackEntry.arguments?.getString("carId")
+            val carId = carIdString?.toIntOrNull()
+            val mapViewModel: MapViewModel = viewModel()
+
+            PaymentScreen(
+                onPaySuccess = {
+                    if (carId != null) {
+                        mapViewModel.reserveCar(carId) {
+                            navController.navigate("mainScreen") {
+                                popUpTo("mainScreen") { inclusive = true }
+                            }
+                        }
+                    }
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
 
         composable("profile") {
