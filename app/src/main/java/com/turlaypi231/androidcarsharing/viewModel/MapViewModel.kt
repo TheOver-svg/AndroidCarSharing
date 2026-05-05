@@ -69,4 +69,24 @@ class MapViewModel: ViewModel() {
     {
         _uiState.update { it.copy(selectedCar = null) }
     }
+
+    fun finishTrip(tripId: Int) {
+        viewModelScope.launch {
+            try {
+                // Викликаємо API для завершення поїздки
+                val response = RetrofitClient.carApi.finishTrip(tripId)
+
+                if (response.isSuccessful) {
+                    // Після завершення:
+                    // 1. Очищуємо активну поїздку в UI
+                    _uiState.update { it.copy(activeTrip = null) }
+                    // 2. Оновлюємо список машин на карті (вона знову має стати available)
+                    loadCars()
+                    Log.d("MapViewModel", "Поїздку завершено успішно")
+                }
+            } catch (e: Exception) {
+                Log.e("MapViewModel", "Помилка при завершенні: ${e.message}")
+            }
+        }
+    }
 }
