@@ -21,7 +21,6 @@ class TripsViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Переконайся, що викликаєш правильний Api Service
                 val response = RetrofitClient.userApi.getMyTrips()
                 if (response.isSuccessful) {
                     _trips.value = response.body() ?: emptyList()

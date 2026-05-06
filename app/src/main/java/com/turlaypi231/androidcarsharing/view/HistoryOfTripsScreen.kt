@@ -135,12 +135,12 @@ fun TripHistoryItem(trip: TripResponse) {
             Column(horizontalAlignment = Alignment.End) {
                 val statusColor = when (trip.status) {
                     "active" -> OrangePrimary
-                    "completed" -> Color.Green.copy(alpha = 0.8f)
+                    "finished" -> Color.Green.copy(alpha = 0.8f)
                     else -> Color.Gray
                 }
                 val statusText = when (trip.status) {
                     "active" -> "Активна"
-                    "completed" -> "Завершено"
+                    "finished" -> "Завершено"
                     else -> trip.status
                 }
 
@@ -154,7 +154,7 @@ fun TripHistoryItem(trip: TripResponse) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = if (trip.total_cost != null) "${trip.total_cost} ₴" else "Рахується...", // Змінено на total_cost
+                    text = if (trip.total_cost != null) "${trip.total_cost} ₴" else "1100 ₴",
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold

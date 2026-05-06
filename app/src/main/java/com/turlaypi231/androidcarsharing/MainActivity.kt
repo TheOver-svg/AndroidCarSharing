@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.turlaypi231.androidcarsharing.ui.theme.AndroidCarSharingTheme
 import com.turlaypi231.androidcarsharing.view.IntroScreen
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -37,6 +38,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = viewModel()
 
+    val mapViewModel: MapViewModel = viewModel()
     NavHost(
         navController = navController,
         startDestination = "login"
@@ -78,23 +80,19 @@ fun AppNavigation() {
         }
 
         composable("payment_screen/{carId}") { backStackEntry ->
-            val carIdString = backStackEntry.arguments?.getString("carId")
-            val carId = carIdString?.toIntOrNull()
-            val mapViewModel: MapViewModel = viewModel()
+            val carId = backStackEntry.arguments?.getString("carId")?.toIntOrNull()
 
             PaymentScreen(
                 onPaySuccess = {
                     if (carId != null) {
                         mapViewModel.reserveCar(carId) {
                             navController.navigate("mainScreen") {
-                                popUpTo("mainScreen") { inclusive = true }
+                                popUpTo("mainScreen") { inclusive = false }
                             }
                         }
                     }
                 },
-                onBackClick = {
-                    navController.popBackStack()
-                }
+                onBackClick = { navController.popBackStack() }
             )
         }
 
@@ -114,7 +112,7 @@ fun AppNavigation() {
         }
 
         composable("mainScreen") {
-            MainScreen(navController = navController)
+            MainScreen(navController = navController, viewModel = mapViewModel)
         }
     }
 }

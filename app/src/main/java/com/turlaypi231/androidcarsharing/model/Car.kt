@@ -15,3 +15,10 @@ sealed class Car {
     @get:SerializedName("plate_number") abstract val plateNumber: String
     @get:SerializedName("engine_type") abstract val engineType: String
 }
+
+data class Trip(
+    @SerializedName("id") val id: Int,
+    @SerializedName("car_id") val carId: Int,
+    @SerializedName("status") val status: String,
+    @SerializedName("car_model") val carModel: String
+)

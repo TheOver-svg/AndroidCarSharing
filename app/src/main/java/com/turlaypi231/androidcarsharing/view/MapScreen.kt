@@ -1,5 +1,6 @@
 package com.turlaypi231.androidcarsharing.view
 
+import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -24,13 +25,16 @@ import com.turlaypi231.androidcarsharing.utills.bitmapDescriptorFromVector
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostController) {
+fun MainScreen(viewModel: MapViewModel, navController: NavHostController) {
     val uiState by viewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -124,6 +128,50 @@ fun MainScreen(viewModel: MapViewModel = viewModel(), navController: NavHostCont
                     }
                 )
 
+                uiState.activeTrip?.let { trip ->
+                    Card(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 110.dp, start = 16.dp, end = 16.dp)
+                            .fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)), // DarkSurface
+                        shape = RoundedCornerShape(20.dp),
+                        elevation = CardDefaults.cardElevation(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(20.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "Поточна оренда",
+                                    color = Color.Gray,
+                                    fontSize = 12.sp
+                                )
+                                Text(
+                                    text = trip.carModel ?: "Авто в оренді",
+                                    color = Color.White,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                            Button(
+                                onClick = { viewModel.finishTrip(trip.id) },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(
+                                        0xFFE53935
+                                    )
+                                ), // Red
+                                shape = RoundedCornerShape(12.dp),
+                                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
+                            ) {
+                                Text("Завершити", color = Color.White, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                }
                 FloatingActionButton(
                     onClick = { scope.launch { drawerState.open() } },
                     modifier = Modifier

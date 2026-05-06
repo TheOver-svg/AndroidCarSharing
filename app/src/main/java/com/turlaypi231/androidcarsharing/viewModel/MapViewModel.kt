@@ -53,6 +53,9 @@ class MapViewModel: ViewModel() {
             try {
                 val response = RetrofitClient.carApi.bookCar(carId)
                 if (response.isSuccessful) {
+                    val trip = response.body()
+                    Log.d("BOOKING", "Тіло відповіді: $trip")
+                    _uiState.update { it.copy(activeTrip = trip) }
                     onSuccess()
                 }
             } catch (e: Exception) {
@@ -73,14 +76,10 @@ class MapViewModel: ViewModel() {
     fun finishTrip(tripId: Int) {
         viewModelScope.launch {
             try {
-                // Викликаємо API для завершення поїздки
                 val response = RetrofitClient.carApi.finishTrip(tripId)
 
                 if (response.isSuccessful) {
-                    // Після завершення:
-                    // 1. Очищуємо активну поїздку в UI
                     _uiState.update { it.copy(activeTrip = null) }
-                    // 2. Оновлюємо список машин на карті (вона знову має стати available)
                     loadCars()
                     Log.d("MapViewModel", "Поїздку завершено успішно")
                 }
