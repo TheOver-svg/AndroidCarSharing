@@ -26,7 +26,7 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun login(email: String, pass: String, onSuccess: () -> Unit) {
+    fun login(email: String, pass: String, onSuccess: (String) -> Unit) {
         viewModelScope.launch {
             try {
                 val credentials = mapOf("email" to email, "password" to pass)
@@ -34,10 +34,9 @@ class AuthViewModel : ViewModel() {
 
                 if (response.isSuccessful) {
                     val token = response.body()?.token
-
                     TokenManager.token = token
 
-                    onSuccess()
+                    onSuccess(email)
                 } else {
                     android.util.Log.e("API_ERROR", "Помилка входу: ${response.code()}")
                 }

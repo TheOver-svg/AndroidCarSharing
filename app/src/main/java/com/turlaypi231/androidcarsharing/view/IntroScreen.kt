@@ -110,7 +110,13 @@ fun IntroScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { onLoginClick(email, password) },
+            onClick = {
+                if (email == "admin@gmail.com" && password == "123") {
+                    onLoginClick(email, password)
+                } else {
+                    onLoginClick(email, password)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
@@ -126,7 +132,6 @@ fun IntroScreen(
                 fontWeight = FontWeight.Bold
             )
         }
-
         Spacer(modifier = Modifier.weight(1f))
 
         Row(

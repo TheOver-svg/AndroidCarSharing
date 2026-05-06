@@ -13,11 +13,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.turlaypi231.androidcarsharing.services.TokenManager
+import com.turlaypi231.androidcarsharing.view.AdminTripsScreen
 import com.turlaypi231.androidcarsharing.view.HistoryOfTripsScreen
 import com.turlaypi231.androidcarsharing.view.MainScreen
 import com.turlaypi231.androidcarsharing.view.PaymentScreen
 import com.turlaypi231.androidcarsharing.view.ProfileScreen
 import com.turlaypi231.androidcarsharing.view.RegisterScreen
+import com.turlaypi231.androidcarsharing.viewModel.AdminViewModel
 import com.turlaypi231.androidcarsharing.viewModel.AuthViewModel
 import com.turlaypi231.androidcarsharing.viewModel.MapViewModel
 
@@ -46,9 +48,15 @@ fun AppNavigation() {
         composable("login") {
             IntroScreen(
                 onLoginClick = { email, password ->
-                    authViewModel.login(email, password) {
-                        navController.navigate("mainScreen") {
-                            popUpTo("login") { inclusive = true }
+                    authViewModel.login(email, password) { loggedInEmail ->
+                        if (loggedInEmail == "admin@gmail.com" && password == "123") {
+                            navController.navigate("admin") {
+                                popUpTo("login") { inclusive = true }
+                            }
+                        } else {
+                            navController.navigate("mainScreen") {
+                                popUpTo("login") { inclusive = true }
+                            }
                         }
                     }
                 },
@@ -92,6 +100,14 @@ fun AppNavigation() {
                         }
                     }
                 },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable("admin") {
+            val adminViewModel: AdminViewModel = viewModel()
+            AdminTripsScreen(
+                viewModel = adminViewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }
