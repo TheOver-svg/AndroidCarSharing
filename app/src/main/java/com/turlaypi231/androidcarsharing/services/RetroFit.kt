@@ -1,6 +1,8 @@
 package com.turlaypi231.androidcarsharing.services
+
 import com.google.gson.GsonBuilder
 import com.turlaypi231.androidcarsharing.data.remote.AuthApi
+import com.turlaypi231.androidcarsharing.data.remote.CarApi
 import com.turlaypi231.androidcarsharing.data.remote.UserApi
 import com.turlaypi231.androidcarsharing.model.Car
 import okhttp3.OkHttpClient
@@ -35,8 +37,8 @@ object RetrofitClient {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
-    val carApi: CarApiService by lazy {
-        retrofit.create(CarApiService::class.java)
+    val carApi: CarApi by lazy {
+        retrofit.create(CarApi::class.java)
     }
 
     val authApi: AuthApi by lazy {

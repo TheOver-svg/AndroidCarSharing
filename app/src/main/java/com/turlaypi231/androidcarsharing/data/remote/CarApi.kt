@@ -1,4 +1,4 @@
-package com.turlaypi231.androidcarsharing.services
+package com.turlaypi231.androidcarsharing.data.remote
 
 import com.turlaypi231.androidcarsharing.model.Car
 import com.turlaypi231.androidcarsharing.model.Trip
@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface CarApiService {
+interface CarApi {
     @GET("/api/v1/cars")
     suspend fun getAllCars(): List<Car>
 

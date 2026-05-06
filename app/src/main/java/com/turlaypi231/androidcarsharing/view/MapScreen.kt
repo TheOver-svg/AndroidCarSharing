@@ -163,7 +163,7 @@ fun MainScreen(viewModel: MapViewModel, navController: NavHostController) {
                                     containerColor = Color(
                                         0xFFE53935
                                     )
-                                ), // Red
+                                ),
                                 shape = RoundedCornerShape(12.dp),
                                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
                             ) {
