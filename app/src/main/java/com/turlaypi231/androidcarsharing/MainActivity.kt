@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.turlaypi231.androidcarsharing.services.TokenManager
-import com.turlaypi231.androidcarsharing.view.AdminTripsScreen
+import com.turlaypi231.androidcarsharing.view.AdminScreen
 import com.turlaypi231.androidcarsharing.view.HistoryOfTripsScreen
 import com.turlaypi231.androidcarsharing.view.MainScreen
 import com.turlaypi231.androidcarsharing.view.PaymentScreen
@@ -106,7 +106,7 @@ fun AppNavigation() {
 
         composable("admin") {
             val adminViewModel: AdminViewModel = viewModel()
-            AdminTripsScreen(
+            AdminScreen(
                 viewModel = adminViewModel,
                 onBackClick = { navController.popBackStack() }
             )

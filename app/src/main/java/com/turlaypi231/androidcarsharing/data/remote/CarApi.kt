@@ -2,8 +2,10 @@ package com.turlaypi231.androidcarsharing.data.remote
 
 import com.turlaypi231.androidcarsharing.model.AdminTripResponse
 import com.turlaypi231.androidcarsharing.model.Car
+import com.turlaypi231.androidcarsharing.model.CarCreate
 import com.turlaypi231.androidcarsharing.model.Trip
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -24,4 +26,7 @@ interface CarApi {
 
     @DELETE("api/v1/admin/cars/{car_id}")
     suspend fun deleteCar(@Path("car_id") carId: Int): Response<Unit>
+
+    @POST("api/v1/create_car")
+    suspend fun createCar(@Body car: CarCreate): Response<Unit>
 }

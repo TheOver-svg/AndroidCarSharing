@@ -16,6 +16,19 @@ sealed class Car {
     @get:SerializedName("engine_type") abstract val engineType: String
 }
 
+data class CarCreate(
+    val model: String,
+    val transmission: String,
+    val price: Int,
+    @SerializedName("engine_type") val engineType: String,
+    @SerializedName("plate_number") val plateNumber: String,
+    val description: String,
+    val location: LocationDto,
+    @SerializedName("fuel_level") val fuelLevel: Int? = null,
+    @SerializedName("battery_level") val batteryLevel: Int? = null
+)
+
+
 data class Trip(
     @SerializedName("id") val id: Int,
     @SerializedName("car_id") val carId: Int,
