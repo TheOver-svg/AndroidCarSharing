@@ -153,7 +153,7 @@ fun CarDetailsSheet(car: Car, mapViewModel: MapViewModel = viewModel(), onNaviga
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "${car.price} ₴ / год",
+                        text = "${car.price} ₴ / хв",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary

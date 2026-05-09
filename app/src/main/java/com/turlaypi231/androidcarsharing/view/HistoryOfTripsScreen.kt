@@ -154,7 +154,7 @@ fun TripHistoryItem(trip: TripResponse) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = if (trip.total_cost != null) "${trip.total_cost} ₴" else "1100 ₴",
+                    text = if (trip.total_cost != null) "${trip.total_cost} ₴" else "В дорозі...",
                     color = Color.White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
