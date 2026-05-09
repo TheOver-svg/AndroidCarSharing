@@ -8,5 +8,6 @@ data class AdminTripResponse(
     @SerializedName("user_email") val userEmail: String,
     @SerializedName("car_model") val carModel: String,
     @SerializedName("status") val status: String,
-    @SerializedName("start_time") val startTime: String
+    @SerializedName("start_time") val startTime: String,
+    @SerializedName("total_cost") val totalCost: Double?
 )

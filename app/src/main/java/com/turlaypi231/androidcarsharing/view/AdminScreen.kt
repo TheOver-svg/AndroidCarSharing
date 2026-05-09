@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.turlaypi231.androidcarsharing.model.AdminTripResponse
 import com.turlaypi231.androidcarsharing.model.Car
 import com.turlaypi231.androidcarsharing.model.CarCreate
@@ -41,9 +42,13 @@ fun AdminScreen(
 
     var selectedTab by remember { mutableIntStateOf(0) }
     var showAddCarDialog by remember { mutableStateOf(false) }
+    val totalRevenue = trips.filter { it.status == "finished" }
+        .sumOf { it.totalCost ?: 0.0 }
+    val finishedTripsCount = trips.count { it.status == "finished" }
 
     LaunchedEffect(selectedTab) {
-        if (selectedTab == 0) viewModel.fetchAllTrips() else viewModel.fetchAllCars()
+        if (selectedTab == 0 || selectedTab == 2) viewModel.fetchAllTrips()
+        if (selectedTab == 1) viewModel.fetchAllCars()
     }
 
     if (showAddCarDialog) {
@@ -93,22 +98,78 @@ fun AdminScreen(
             ) {
                 Tab(selected = selectedTab == 0, onClick = { selectedTab = 0 }, text = { Text("Бронювання") })
                 Tab(selected = selectedTab == 1, onClick = { selectedTab = 1 }, text = { Text("Автопарк") })
+                Tab(selected = selectedTab == 2, onClick = {selectedTab = 2}, text = {Text("Дохід")})
             }
 
             if (isLoading) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth(), color = OrangePrimary)
             }
+            when (selectedTab) {
+                0 -> { // Вкладка Бронювання
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(trips) { trip -> AdminTripCard(trip) }
+                    }
+                }
+                1 -> { // Вкладка Автопарк
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(cars) { car ->
+                            AdminCarCard(car = car, onDelete = { viewModel.deleteCar(it) })
+                        }
+                    }
+                }
+                2 -> { // Вкладка Дохід
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                            shape = RoundedCornerShape(16.dp),
+                            border = BorderStroke(1.dp, OrangePrimary.copy(alpha = 0.5f))
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text("Загальний дохід", color = Color.Gray)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "${String.format("%.2f", totalRevenue)} ₴",
+                                    color = Color.White,
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                if (selectedTab == 0) {
-                    items(trips) { trip -> AdminTripCard(trip) }
-                } else {
-                    items(cars) { car ->
-                        AdminCarCard(car = car, onDelete = { viewModel.deleteCar(it) })
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            StatSmallCard(
+                                label = "Завершено",
+                                value = "$finishedTripsCount",
+                                modifier = Modifier.weight(1f)
+                            )
+                            val avg = if (finishedTripsCount > 0) totalRevenue / finishedTripsCount else 0.0
+                            StatSmallCard(
+                                label = "Середній чек",
+                                value = "${String.format("%.1f", avg)} ₴",
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
                     }
                 }
             }
@@ -155,6 +216,11 @@ fun AdminTripCard(trip: AdminTripResponse) {
                 text = "ID поїздки: #${trip.tripId}",
                 color = Color.Gray,
                 style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                text = if (trip.totalCost != null) "${trip.totalCost} ₴" else "Рахується...",
+                color = if (trip.totalCost != null) OrangePrimary else Color.Gray,
+                fontWeight = FontWeight.Bold
             )
         }
     }
@@ -251,4 +317,18 @@ fun AddCarDialog(onDismiss: () -> Unit, onConfirm: (CarCreate) -> Unit) {
             TextButton(onClick = onDismiss) { Text("СКАСУВАТИ", color = Color.Gray) }
         }
     )
+}
+
+@Composable
+fun StatSmallCard(label: String, value: String, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(label, color = Color.Gray, style = MaterialTheme.typography.labelMedium)
+            Text(value, color = OrangePrimary, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        }
+    }
 }
