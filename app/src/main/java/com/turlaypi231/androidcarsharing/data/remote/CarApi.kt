@@ -1,0 +1,32 @@
+package com.turlaypi231.androidcarsharing.data.remote
+
+import com.turlaypi231.androidcarsharing.model.AdminTripResponse
+import com.turlaypi231.androidcarsharing.model.Car
+import com.turlaypi231.androidcarsharing.model.CarCreate
+import com.turlaypi231.androidcarsharing.model.Trip
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+
+interface CarApi {
+    @GET("/api/v1/cars")
+    suspend fun getAllCars(): List<Car>
+
+    @POST("api/v1/users/{trip_id}/finish")
+    suspend fun finishTrip(@Path("trip_id") tripId: Int): Response<Unit>
+
+    @POST("api/v1/cars/{car_id}/book")
+    suspend fun bookCar(@Path("car_id") carId: Int): Response<Trip>
+
+    @GET("api/v1/admin/trips/all")
+    suspend fun getAllTripsAdmin(): Response<List<AdminTripResponse>>
+
+    @DELETE("api/v1/admin/cars/{car_id}")
+    suspend fun deleteCar(@Path("car_id") carId: Int): Response<Unit>
+
+    @POST("api/v1/create_car")
+    suspend fun createCar(@Body car: CarCreate): Response<Unit>
+}
